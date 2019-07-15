@@ -217,13 +217,7 @@ int main(int argc, char **argv)
       if (netlist->IsOperator()){
         smod =  smod + "module " + netlist->Owner()->Name() + " {\n" + Printports(netlist) + PrintNets(netlist) + Printinst(netlist) + "}\n\n\n" ;
       }
-      if (netlist->IsPrimitive()){
-        if(strcmp(netlist->Owner()->Name(),"VERIFIC_GND") == 0){
-          spri = spri + "module " + netlist->Owner()->Name() + " {\n" + Printports(netlist) + "next {\n o' = 0bv1 ;\n}\n" + Printinst(netlist) + "}\n\n\n" ;
-        }
-        else
-          spri = spri + "module "  + netlist->Owner()->Name()  + " {\n" + Printports(netlist) + PrintNets(netlist) + Printinst(netlist) + "}\n\n\n" ;
-      }
+      
   }
   string fstr = spri + "\n" + smod  + "\n" + mod;
     ofstream out((string)top->Owner()->Name() + ".ucl");
