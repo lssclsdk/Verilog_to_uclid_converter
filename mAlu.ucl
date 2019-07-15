@@ -1,0 +1,209 @@
+module Mux_2u_4u {
+input sel_1 , sel_0 , data_3 , data_2 , data_1 , data_0  : bv1 ;
+output o  : bv1 ;
+var n1 , n2  : bv1 ;
+next {
+if (sel_0' == 1bv1 ) {
+n1' = data_0';
+} else {
+n1' = data_1' ;
+}
+if (sel_0' == 1bv1 ) {
+n2' = data_2';
+} else {
+n2' = data_3' ;
+}
+if (sel_1' == 1bv1 ) {
+o' = n1';
+} else {
+o' = n2' ;
+}
+}
+}
+
+
+module add_8u_8u {
+input cin , a_7 , a_6 , a_5 , a_4 , a_3 , a_2 , a_1 , a_0 , b_7 , b_6 , b_5 , b_4 , b_3 , b_2 , b_1 , b_0  : bv1 ;
+output o_7 , o_6 , o_5 , o_4 , o_3 , o_2 , o_1 , o_0 , cout  : bv1 ;
+var n2 , n4 , n6 , n8 , n10 , n12 , n14  : bv1 ;
+instance i1 : VERIFIC_FADD( a : (a_0) , b : (b_0) , cin : (cin) , o : (o_0) , cout : (n2) );
+instance i2 : VERIFIC_FADD( a : (a_1) , b : (b_1) , cin : (n2) , o : (o_1) , cout : (n4) );
+instance i3 : VERIFIC_FADD( a : (a_2) , b : (b_2) , cin : (n4) , o : (o_2) , cout : (n6) );
+instance i4 : VERIFIC_FADD( a : (a_3) , b : (b_3) , cin : (n6) , o : (o_3) , cout : (n8) ); 
+instance i5 : VERIFIC_FADD( a : (a_4) , b : (b_4) , cin : (n8) , o : (o_4) , cout : (n10) );
+instance i6 : VERIFIC_FADD( a : (a_5) , b : (b_5) , cin : (n10) , o : (o_5) , cout : (n12) );
+instance i7 : VERIFIC_FADD( a : (a_6) , b : (b_6) , cin : (n12) , o : (o_6) , cout : (n14) );
+instance i8 : VERIFIC_FADD( a : (a_7) , b : (b_7) , cin : (n14) , o : (o_7) , cout : (cout) );
+}
+
+
+module reduce_nor_2 {
+input a_1 , a_0  : bv1 ;
+output o  : bv1 ;
+var n1  : bv1 ;
+next {
+n1' = a_0' | a_1' ;
+o' = ~ n1' ;
+}
+}
+
+
+module reduce_nor_8 {
+input a_7 , a_6 , a_5 , a_4 , a_3 , a_2 , a_1 , a_0  : bv1 ;
+output o  : bv1 ;
+var n1 , n2 , n3 , n4 , n5 , n6 , n7  : bv1 ;
+next {
+n1' = a_0' | a_1' ;
+n2' = a_2' | a_3' ;
+n3' = n1' | n2' ;
+n4' = a_4' | a_5' ;
+n5' = a_6' | a_7' ;
+n6' = n4' | n5' ;
+n7' = n3' | n6' ;
+o' = ~ n7' ;
+}
+}
+
+
+module Select_9 {
+input sel_8 , sel_7 , sel_6 , sel_5 , sel_4 , sel_3 , sel_2 , sel_1 , sel_0 , data_8 , data_7 , data_6 , data_5 , data_4 , data_3 , data_2 , data_1 , data_0  : bv1 ;
+output o  : bv1 ;
+var n1 , n2 , n3 , n4 , n5 , n6 , n7 , n8 , n9 , n10 , n11 , n12 , n13 , n14 , n15 , n16  : bv1 ;
+next {
+n1' = data_0' & sel_0' ;
+n2' = data_1' & sel_1' ;
+n3' = data_2' & sel_2' ;
+n4' = data_3' & sel_3' ;
+n5' = data_4' & sel_4' ;
+n6' = data_5' & sel_5' ;
+n7' = data_6' & sel_6' ;
+n8' = data_7' & sel_7' ;
+n9' = data_8' & sel_8' ;
+n10' = n1' | n2' ;
+n11' = n3' | n4' ;
+n12' = n10' | n11' ;
+n13' = n5' | n6' ;
+n14' = n8' | n9' ;
+n15' = n7' | n14' ;
+n16' = n13' | n15' ;
+o' = n12' | n16' ;
+}
+}
+
+
+
+module main {
+input PC_7 , PC_6 , PC_5 , PC_4 , PC_3 , PC_2 , PC_1 , PC_0 , ReadData1_7 , ReadData1_6 , ReadData1_5 , ReadData1_4 , ReadData1_3 , ReadData1_2 , ReadData1_1 , ReadData1_0 , ReadData2_7 , ReadData2_6 , ReadData2_5 , ReadData2_4 , ReadData2_3 , ReadData2_2 , ReadData2_1 , ReadData2_0 , Instruction_15 , Instruction_14 , Instruction_13 , Instruction_12 , Instruction_11 , Instruction_10 , Instruction_9 , Instruction_8 , Instruction_7 , Instruction_6 , Instruction_5 , Instruction_4 , Instruction_3 , Instruction_2 , Instruction_1 , Instruction_0 , ALUSelA , ALUSelB_1 , ALUSelB_0 , ALUOp_1 , ALUOp_0  : bv1 ;
+output Zero , ALU_result_7 , ALU_result_6 , ALU_result_5 , ALU_result_4 , ALU_result_3 , ALU_result_2 , ALU_result_1 , ALU_result_0  : bv1 ;
+var n1 , n2 , MuxA_7 , MuxA_6 , MuxA_5 , MuxA_4 , MuxA_3 , MuxA_2 , MuxA_1 , MuxA_0 , MuxB_7 , MuxB_6 , MuxB_5 , MuxB_4 , MuxB_3 , MuxB_2 , MuxB_1 , MuxB_0 , n21 , n22 , n23 , n24 , n25 , n26 , n27 , n28 , n29 , n30 , n31 , n32 , n33 , n34 , n35 , n36 , n38 , n39 , n40 , n41 , n42 , n43 , n44 , n45 , n46 , n47 , n48 , n49 , n50 , n51 , n52 , n53 , n54 , n55 , n56 , n57 , n58 , n59 , n60 , n61 , n62 , n63 , n64 , n65 , n66 , n67 , n68 , n69 , n96 , n97 , n98 , n99 , n100 , n101 , n102 , n103 , n107 , n108 , n112 , n115 , n119 , n122 , n124  : bv1 ;
+next {
+n1' = 0bv1 ;
+n2' = 1bv1 ;
+if (ALUSelA' == 1bv1 ) {
+MuxA_7' = PC_7';
+} else {
+MuxA_7' = ReadData1_7' ;
+}
+if (ALUSelA' == 1bv1 ) {
+MuxA_6' = PC_6';
+} else {
+MuxA_6' = ReadData1_6' ;
+}
+if (ALUSelA' == 1bv1 ) {
+MuxA_5' = PC_5';
+} else {
+MuxA_5' = ReadData1_5' ;
+}
+if (ALUSelA' == 1bv1 ) {
+MuxA_4' = PC_4';
+} else {
+MuxA_4' = ReadData1_4' ;
+}
+if (ALUSelA' == 1bv1 ) {
+MuxA_3' = PC_3';
+} else {
+MuxA_3' = ReadData1_3' ;
+}
+if (ALUSelA' == 1bv1 ) {
+MuxA_2' = PC_2';
+} else {
+MuxA_2' = ReadData1_2' ;
+}
+if (ALUSelA' == 1bv1 ) {
+MuxA_1' = PC_1';
+} else {
+MuxA_1' = ReadData1_1' ;
+}
+if (ALUSelA' == 1bv1 ) {
+MuxA_0' = PC_0';
+} else {
+MuxA_0' = ReadData1_0' ;
+}
+n29' = ~ MuxB_7' ;
+n30' = ~ MuxB_6' ;
+n31' = ~ MuxB_5' ;
+n32' = ~ MuxB_4' ;
+n33' = ~ MuxB_3' ;
+n34' = ~ MuxB_2' ;
+n35' = ~ MuxB_1' ;
+n36' = ~ MuxB_0' ;
+n46' = MuxA_0' & MuxB_0' ;
+n47' = MuxA_1' & MuxB_1' ;
+n48' = MuxA_2' & MuxB_2' ;
+n49' = MuxA_3' & MuxB_3' ;
+n50' = MuxA_4' & MuxB_4' ;
+n51' = MuxA_5' & MuxB_5' ;
+n52' = MuxA_6' & MuxB_6' ;
+n53' = MuxA_7' & MuxB_7' ;
+n54' = MuxA_0' | MuxB_0' ;
+n55' = MuxA_1' | MuxB_1' ;
+n56' = MuxA_2' | MuxB_2' ;
+n57' = MuxA_3' | MuxB_3' ;
+n58' = MuxA_4' | MuxB_4' ;
+n59' = MuxA_5' | MuxB_5' ;
+n60' = MuxA_6' | MuxB_6' ;
+n61' = MuxA_7' | MuxB_7' ;
+n62' = MuxA_0' ^ MuxB_0' ;
+n63' = MuxA_1' ^ MuxB_1' ;
+n64' = MuxA_2' ^ MuxB_2' ;
+n65' = MuxA_3' ^ MuxB_3' ;
+n66' = MuxA_4' ^ MuxB_4' ;
+n67' = MuxA_5' ^ MuxB_5' ;
+n68' = MuxA_6' ^ MuxB_6' ;
+n69' = MuxA_7' ^ MuxB_7' ;
+n97' = ~ ALUOp_0' ;
+n99' = ~ Instruction_2' ;
+n100' = ~ Instruction_5' ;
+n101' = ~ ALUOp_1' ;
+n103' = ~ Instruction_0' ;
+n108' = ~ Instruction_1' ;
+}
+instance Mux_11 : Mux_2u_4u( sel_1 : (ALUSelB_1) , sel_0 : (ALUSelB_0) , data_3 : (Instruction_7) , data_2 : (Instruction_7) , data_1 : (n1) , data_0 : (ReadData2_7) , o : (MuxB_7) );
+instance Mux_12 : Mux_2u_4u( sel_1 : (ALUSelB_1) , sel_0 : (ALUSelB_0) , data_3 : (Instruction_6) , data_2 : (Instruction_6) , data_1 : (n1) , data_0 : (ReadData2_6) , o : (MuxB_6) );
+instance Mux_13 : Mux_2u_4u( sel_1 : (ALUSelB_1) , sel_0 : (ALUSelB_0) , data_3 : (Instruction_5) , data_2 : (Instruction_5) , data_1 : (n1) , data_0 : (ReadData2_5) , o : (MuxB_5) );
+instance Mux_14 : Mux_2u_4u( sel_1 : (ALUSelB_1) , sel_0 : (ALUSelB_0) , data_3 : (Instruction_4) , data_2 : (Instruction_4) , data_1 : (n1) , data_0 : (ReadData2_4) , o : (MuxB_4) );
+instance Mux_15 : Mux_2u_4u( sel_1 : (ALUSelB_1) , sel_0 : (ALUSelB_0) , data_3 : (Instruction_3) , data_2 : (Instruction_3) , data_1 : (n1) , data_0 : (ReadData2_3) , o : (MuxB_3) );
+instance Mux_16 : Mux_2u_4u( sel_1 : (ALUSelB_1) , sel_0 : (ALUSelB_0) , data_3 : (Instruction_2) , data_2 : (Instruction_2) , data_1 : (n1) , data_0 : (ReadData2_2) , o : (MuxB_2) );
+instance Mux_17 : Mux_2u_4u( sel_1 : (ALUSelB_1) , sel_0 : (ALUSelB_0) , data_3 : (Instruction_1) , data_2 : (Instruction_1) , data_1 : (n1) , data_0 : (ReadData2_1) , o : (MuxB_1) );
+instance Mux_18 : Mux_2u_4u( sel_1 : (ALUSelB_1) , sel_0 : (ALUSelB_0) , data_3 : (Instruction_0) , data_2 : (Instruction_0) , data_1 : (n2) , data_0 : (ReadData2_0) , o : (MuxB_0) );
+instance add_19 : add_8u_8u( cin : (n1) , a_7 : (MuxA_7) , a_6 : (MuxA_6) , a_5 : (MuxA_5) , a_4 : (MuxA_4) , a_3 : (MuxA_3) , a_2 : (MuxA_2) , a_1 : (MuxA_1) , a_0 : (MuxA_0) , b_7 : (MuxB_7) , b_6 : (MuxB_6) , b_5 : (MuxB_5) , b_4 : (MuxB_4) , b_3 : (MuxB_3) , b_2 : (MuxB_2) , b_1 : (MuxB_1) , b_0 : (MuxB_0) , o_7 : (n21) , o_6 : (n22) , o_5 : (n23) , o_4 : (n24) , o_3 : (n25) , o_2 : (n26) , o_1 : (n27) , o_0 : (n28) );
+instance add_28 : add_8u_8u( cin : (n2) , a_7 : (MuxA_7) , a_6 : (MuxA_6) , a_5 : (MuxA_5) , a_4 : (MuxA_4) , a_3 : (MuxA_3) , a_2 : (MuxA_2) , a_1 : (MuxA_1) , a_0 : (MuxA_0) , b_7 : (n29) , b_6 : (n30) , b_5 : (n31) , b_4 : (n32) , b_3 : (n33) , b_2 : (n34) , b_1 : (n35) , b_0 : (n36) , o_7 : (n38) , o_6 : (n39) , o_5 : (n40) , o_4 : (n41) , o_3 : (n42) , o_2 : (n43) , o_1 : (n44) , o_0 : (n45) );
+instance reduce_nor_63 : reduce_nor_2( a_1 : (ALUOp_1) , a_0 : (ALUOp_0) , o : (n96) );
+instance reduce_nor_65 : reduce_nor_2( a_1 : (ALUOp_1) , a_0 : (n97) , o : (n98) );
+instance reduce_nor_69 : reduce_nor_8( a_7 : (n101) , a_6 : (ALUOp_0) , a_5 : (n100) , a_4 : (Instruction_4) , a_3 : (Instruction_3) , a_2 : (n99) , a_1 : (Instruction_1) , a_0 : (Instruction_0) , o : (n102) );
+instance reduce_nor_74 : reduce_nor_8( a_7 : (n101) , a_6 : (ALUOp_0) , a_5 : (n100) , a_4 : (Instruction_4) , a_3 : (Instruction_3) , a_2 : (n99) , a_1 : (Instruction_1) , a_0 : (n103) , o : (n107) );
+instance reduce_nor_79 : reduce_nor_8( a_7 : (n101) , a_6 : (ALUOp_0) , a_5 : (n100) , a_4 : (Instruction_4) , a_3 : (Instruction_3) , a_2 : (n99) , a_1 : (n108) , a_0 : (Instruction_0) , o : (n112) );
+instance reduce_nor_82 : reduce_nor_8( a_7 : (n101) , a_6 : (ALUOp_0) , a_5 : (n100) , a_4 : (Instruction_4) , a_3 : (Instruction_3) , a_2 : (Instruction_2) , a_1 : (Instruction_1) , a_0 : (Instruction_0) , o : (n115) );
+instance reduce_nor_86 : reduce_nor_8( a_7 : (n101) , a_6 : (ALUOp_0) , a_5 : (n100) , a_4 : (Instruction_4) , a_3 : (Instruction_3) , a_2 : (Instruction_2) , a_1 : (n108) , a_0 : (Instruction_0) , o : (n119) );
+instance reduce_nor_89 : reduce_nor_8( a_7 : (n101) , a_6 : (ALUOp_0) , a_5 : (Instruction_5) , a_4 : (Instruction_4) , a_3 : (Instruction_3) , a_2 : (Instruction_2) , a_1 : (n108) , a_0 : (Instruction_0) , o : (n122) );
+instance reduce_nor_91 : reduce_nor_8( a_7 : (n101) , a_6 : (ALUOp_0) , a_5 : (Instruction_5) , a_4 : (Instruction_4) , a_3 : (Instruction_3) , a_2 : (Instruction_2) , a_1 : (Instruction_1) , a_0 : (Instruction_0) , o : (n124) );
+instance Select_93 : Select_9( sel_8 : (n96) , sel_7 : (n98) , sel_6 : (n102) , sel_5 : (n107) , sel_4 : (n112) , sel_3 : (n115) , sel_2 : (n119) , sel_1 : (n122) , sel_0 : (n124) , data_8 : (n21) , data_7 : (n38) , data_6 : (n53) , data_5 : (n61) , data_4 : (n69) , data_3 : (n21) , data_2 : (n38) , data_1 : (n1) , data_0 : (MuxB_6) , o : (ALU_result_7) );
+instance Select_94 : Select_9( sel_8 : (n96) , sel_7 : (n98) , sel_6 : (n102) , sel_5 : (n107) , sel_4 : (n112) , sel_3 : (n115) , sel_2 : (n119) , sel_1 : (n122) , sel_0 : (n124) , data_8 : (n22) , data_7 : (n39) , data_6 : (n52) , data_5 : (n60) , data_4 : (n68) , data_3 : (n22) , data_2 : (n39) , data_1 : (MuxB_7) , data_0 : (MuxB_5) , o : (ALU_result_6) );
+instance Select_95 : Select_9( sel_8 : (n96) , sel_7 : (n98) , sel_6 : (n102) , sel_5 : (n107) , sel_4 : (n112) , sel_3 : (n115) , sel_2 : (n119) , sel_1 : (n122) , sel_0 : (n124) , data_8 : (n23) , data_7 : (n40) , data_6 : (n51) , data_5 : (n59) , data_4 : (n67) , data_3 : (n23) , data_2 : (n40) , data_1 : (MuxB_6) , data_0 : (MuxB_4) , o : (ALU_result_5) );
+instance Select_96 : Select_9( sel_8 : (n96) , sel_7 : (n98) , sel_6 : (n102) , sel_5 : (n107) , sel_4 : (n112) , sel_3 : (n115) , sel_2 : (n119) , sel_1 : (n122) , sel_0 : (n124) , data_8 : (n24) , data_7 : (n41) , data_6 : (n50) , data_5 : (n58) , data_4 : (n66) , data_3 : (n24) , data_2 : (n41) , data_1 : (MuxB_5) , data_0 : (MuxB_3) , o : (ALU_result_4) );
+instance Select_97 : Select_9( sel_8 : (n96) , sel_7 : (n98) , sel_6 : (n102) , sel_5 : (n107) , sel_4 : (n112) , sel_3 : (n115) , sel_2 : (n119) , sel_1 : (n122) , sel_0 : (n124) , data_8 : (n25) , data_7 : (n42) , data_6 : (n49) , data_5 : (n57) , data_4 : (n65) , data_3 : (n25) , data_2 : (n42) , data_1 : (MuxB_4) , data_0 : (MuxB_2) , o : (ALU_result_3) );
+instance Select_98 : Select_9( sel_8 : (n96) , sel_7 : (n98) , sel_6 : (n102) , sel_5 : (n107) , sel_4 : (n112) , sel_3 : (n115) , sel_2 : (n119) , sel_1 : (n122) , sel_0 : (n124) , data_8 : (n26) , data_7 : (n43) , data_6 : (n48) , data_5 : (n56) , data_4 : (n64) , data_3 : (n26) , data_2 : (n43) , data_1 : (MuxB_3) , data_0 : (MuxB_1) , o : (ALU_result_2) );
+instance Select_99 : Select_9( sel_8 : (n96) , sel_7 : (n98) , sel_6 : (n102) , sel_5 : (n107) , sel_4 : (n112) , sel_3 : (n115) , sel_2 : (n119) , sel_1 : (n122) , sel_0 : (n124) , data_8 : (n27) , data_7 : (n44) , data_6 : (n47) , data_5 : (n55) , data_4 : (n63) , data_3 : (n27) , data_2 : (n44) , data_1 : (MuxB_2) , data_0 : (MuxB_0) , o : (ALU_result_1) );
+instance Select_100 : Select_9( sel_8 : (n96) , sel_7 : (n98) , sel_6 : (n102) , sel_5 : (n107) , sel_4 : (n112) , sel_3 : (n115) , sel_2 : (n119) , sel_1 : (n122) , sel_0 : (n124) , data_8 : (n28) , data_7 : (n45) , data_6 : (n46) , data_5 : (n54) , data_4 : (n62) , data_3 : (n28) , data_2 : (n45) , data_1 : (MuxB_1) , data_0 : (n1) , o : (ALU_result_0) );
+instance reduce_nor_101 : reduce_nor_8( a_7 : (ALU_result_7) , a_6 : (ALU_result_6) , a_5 : (ALU_result_5) , a_4 : (ALU_result_4) , a_3 : (ALU_result_3) , a_2 : (ALU_result_2) , a_1 : (ALU_result_1) , a_0 : (ALU_result_0) , o : (Zero) );
+}
